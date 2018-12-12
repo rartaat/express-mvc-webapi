@@ -39,7 +39,7 @@ flats.post('/', (req, res) => { // flats objektum post metódusát hívom meg, a
 // update
 flats.put('/:id', (req, res) => { // a flats nevű objektum a put metódussal két bemeneti argumentumot vár, ami a request és a response
   models.Flat.findById(req.params.id).then(result => { //  a models objectum Flats nevű objektumnak az update metódusában egy paramétert vár, mely az objektum property-je lesz
-    models.Flat.findOne({ where: { model: req.body.model } }).then(result => { 
+    models.Flat.findOne({ where: { model: req.body.model } }).then(result => {
       if (result) {
         return res.status(400).send('Erre nem modosithatod, mar letezik!');
       }
