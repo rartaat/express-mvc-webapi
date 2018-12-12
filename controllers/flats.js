@@ -1,32 +1,32 @@
-const express = require('express');
-const flats = express();
-const models = require('../models');
+const express = require('express'); // definiálom az expresst
+const flats = express(); // meghívom az express metódusát
+const models = require('../models'); // importálom a modelst
 
-// index
-flats.get('/', (req, res) => {
-  models.Flat.findAll().then(flats => {
-    res.json(flats);
+// indeyx, azaz kilistázza az összes létező tagot
+flats.get('/', (req, res) => { // flats objekt get metódusát meghívom, ami egy callback fgv.
+  models.Flat.findAll().then(flats => { // models obj Flat objektum findAll metódusa meghívom, ami egy promissal tér vissza. Az igaz ágában, azaz a thenbe egy flats objektum callback fgv tér vissza.
+    res.json(flats); // egy JSON fáljba menti az adatokat.
   });
 });
 
 // show by ID
-flats.get('/:id', (req, res) => {
-  models.Flat.findById(req.params.id).then(flat => {
-    if (!flat) {
+flats.get('/:id', (req, res) => { // flats objektum get metódusát meghívom, ami egy callback fgv-t ad vissza bemeneti paraméterként.
+  models.Flat.findById(req.params.id).then(flat => { // Flat objekt findByID metódusát meghívjuk, majd ez is egy promiset ad vissza.
+    if (!flat) { // itt ha az igaz ágban, azaz a thenbe egy feltétel hamis lesz, akkor hiba üzenetet fog adni.
       return res.status(400).send('Nem talalhato ilyen ID!');
     }
-    res.json(flat);
+    res.json(flat); // egy JSON fáljba menti az adatokat.
   });
 });
 
 // create
-flats.post('/', (req, res) => {
-  models.Flat.findOne({
+flats.post('/', (req, res) => { // flats objektum post metódusát hívom meg, aminek két bemeneti paramétere van és egy callback fgv tér vissza.
+  models.Flat.findOne({ // modelsobjektum Flat propertyéje a findOne metódust hívom meg
     where: {
       title: req.body.title
     }
-  }).then(preResult => {
-    if (preResult) {
+  }).then(result => { // szintén promissal tér vissza, amiben egy hibakezelés látható
+    if (result) {
       return res.status(400).send('Mar letezik ilyen bizsuóra, agyááá mög másikat!');
     } else {
       models.Flat.create(req.body).then(flat => {
