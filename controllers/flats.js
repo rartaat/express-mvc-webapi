@@ -3,7 +3,7 @@ const flats = express(); // meghívom az express metódusát
 const models = require('../models'); // importálom a modelst
 
 // indeyx, azaz kilistázza az összes létező tagot
-flats.get('/', (req, res) => { // flats objekt get metódusát meghívom, ami egy callback fgv.
+flats.get('/', (req, res) => { // a flats objektum a get metódussal két bemeneti argumentumot vár, ami a request és a response
   models.Flat.findAll().then(flats => { // models obj Flat objektum findAll metódusa meghívom, ami egy promissal tér vissza. Az igaz ágában, azaz a thenbe egy flats objektum callback fgv tér vissza.
     res.json(flats); // egy JSON fáljba menti az adatokat.
   });
@@ -15,7 +15,7 @@ flats.get('/:id', (req, res) => { // flats objektum get metódusát meghívom, a
     if (!flat) { // itt ha az igaz ágban, azaz a thenbe egy feltétel hamis lesz, akkor hiba üzenetet fog adni.
       return res.status(400).send('Nem talalhato ilyen ID!');
     }
-    res.json(flat); // egy JSON fáljba menti az adatokat.
+    res.json(flat); // ami a res objektum json formátumú metódusával tér vissza, amely megjeleníti az id alapján várt elemet
   });
 });
 
@@ -37,9 +37,9 @@ flats.post('/', (req, res) => { // flats objektum post metódusát hívom meg, a
 });
 
 // update
-flats.put('/:id', (req, res) => {
-  models.Flat.findById(req.params.id).then(result => {
-    models.Flat.findOne({ where: { model: req.body.model } }).then(result => {
+flats.put('/:id', (req, res) => { // a flats nevű objektum a put metódussal két bemeneti argumentumot vár, ami a request és a response
+  models.Flat.findById(req.params.id).then(result => { //  a models objectum Flats nevű objektumnak az update metódusában egy paramétert vár, mely az objektum property-je lesz
+    models.Flat.findOne({ where: { model: req.body.model } }).then(result => { 
       if (result) {
         return res.status(400).send('Erre nem modosithatod, mar letezik!');
       }
@@ -48,7 +48,7 @@ flats.put('/:id', (req, res) => {
       return res.status(400).send('Nincs ilyen FLAT, igy nem tudsz rajta valtoztatni!');
     } else {
       models.Flat.update(req.body, { where: { id: req.params.id } }).then(result => {
-        res.json(result);
+        res.json(result); // a res objektum json formátumú metódusával tér vissza, amely megmutatja a módosított elemet
       });
     }
   });
